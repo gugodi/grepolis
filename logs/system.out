@@ -1,21 +1,25 @@
 Listening for transport dt_socket at address: 8000
-19:41:17,487 INFO  ~ Starting C:\Users\memo\PLAY\play-1.2.3\grepolis
-19:41:18,792 WARN  ~ You're running Play! in DEV mode
-19:41:19,016 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
-19:41:31,898 INFO  ~ Connected to jdbc:mysql://localhost/test?useUnicode=yes&characterEncoding=UTF-8&connectionCollation=utf8_general_ci
-19:41:34,458 INFO  ~ Application 'grepolis' is now started !
-19:41:36,450 INFO  ~ -----Alliances:-----
-19:41:40,138 INFO  ~ done
-19:41:40,138 INFO  ~ -----AllyAll:-----
-19:41:45,958 INFO  ~ done
-19:41:45,958 INFO  ~ -----AllyAtt:-----
-19:41:49,372 INFO  ~ done
-19:41:49,372 INFO  ~ -----AllyDef:-----
-19:41:53,690 INFO  ~ done
-19:41:55,766 INFO  ~ -----Joueurs:-----
-19:42:32,381 INFO  ~ done
-19:42:32,381 INFO  ~ -----PlayerAll:-----
-19:44:01,931 INFO  ~ done
-19:44:01,931 INFO  ~ -----PlayerAtt:-----
-19:46:15,112 INFO  ~ done
-19:46:15,112 INFO  ~ -----PlayerDef:-----
+20:03:52,498 INFO  ~ Starting C:\Users\memo\PLAY\play-1.2.3\grepolis
+20:03:53,791 WARN  ~ You're running Play! in DEV mode
+20:03:54,006 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+20:04:03,421 INFO  ~ Connected to jdbc:mysql://localhost/test?useUnicode=yes&characterEncoding=UTF-8&connectionCollation=utf8_general_ci
+20:04:05,466 INFO  ~ Application 'grepolis' is now started !
+20:04:07,537 INFO  ~ -----Alliances:-----
+20:04:10,823 INFO  ~ done
+20:04:10,824 INFO  ~ -----AllyAll:-----
+20:04:15,421 INFO  ~ done
+20:04:15,422 INFO  ~ -----AllyAtt:-----
+20:04:18,409 INFO  ~ done
+20:04:18,409 INFO  ~ -----AllyDef:-----
+20:04:22,577 INFO  ~ done
+20:04:24,571 INFO  ~ -----Joueurs:-----
+20:04:59,452 INFO  ~ done
+20:04:59,452 INFO  ~ -----PlayerAll:-----
+20:06:26,702 INFO  ~ done
+20:06:26,702 INFO  ~ -----PlayerAtt:-----
+20:08:29,880 INFO  ~ done
+20:08:29,881 INFO  ~ -----PlayerDef:-----
+20:09:55,305 INFO  ~ done
+20:09:55,805 INFO  ~ -----Villages:-----
+20:15:50,563 INFO  ~ done
+20:15:51,077 INFO  ~ -----Conquer:-----

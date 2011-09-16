@@ -367,6 +367,7 @@ public class Populator extends Job {
 		Logger.info("-----Conquer:-----");
 		Scanner scanner = new Scanner(conquerIn).useDelimiter(",");
 		Conquer lastConquer = Conquer.find("SELECT c FROM Conquer c ORDER BY c.date DESC").first();
+		Date lastDate = lastConquer != null ? lastConquer.date : new Date(0);
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
@@ -379,7 +380,7 @@ public class Populator extends Job {
 			long score = ligne.nextLong();
 			
 			
-			Date lastDate = lastConquer.date;
+			
 			if(date.after(lastDate)){
 				Conquer conquer = new Conquer();
 				conquer.town = Town.find("byIgId", townId).first();
