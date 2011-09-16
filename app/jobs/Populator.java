@@ -382,14 +382,12 @@ public class Populator extends Job {
 			long score = ligne.nextLong();
 			
 			Date date = new Date(dateLong*1000);
-			Logger.info("ig:"+dateLong+", last:"+lastDate.getTime()+", trans:"+date.getTime()+" today:"+now.getTime());
 			if(date.after(lastDate)){
 				Conquer conquer = new Conquer();
 				conquer.town = Town.find("byIgId", townId).first();
 				conquer.date = date;
 				conquer.winner = Player.find("byIgId", winnerId).first();
-				Logger.info("ben si !!!!");
-			
+		
 				if (!loserId.equals("")) {
 					conquer.loser =  Player.find("byIgId", Long.valueOf(loserId)).first();
 				}
