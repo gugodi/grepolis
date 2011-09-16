@@ -344,8 +344,10 @@ public class Populator extends Job {
 		Logger.info("done");
 		return true;
 	}
+	
 	public boolean ConquerPop() {
 		
+		Date now = new Date();
 		URL conquerUrl;
 		
 		try {
@@ -367,26 +369,26 @@ public class Populator extends Job {
 		Logger.info("-----Conquer:-----");
 		Scanner scanner = new Scanner(conquerIn).useDelimiter(",");
 		Conquer lastConquer = Conquer.find("SELECT c FROM Conquer c ORDER BY c.date DESC").first();
-		Date lastDate = lastConquer != null ? lastConquer.date : new Date(0);
+		Date lastDate = lastConquer == null ? new Date(0): lastConquer.date;
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
 			long townId = ligne.nextLong();
-			Date date = new Date(ligne.nextLong());
+			long dateLong = ligne.nextInt();
 			long winnerId = ligne.nextLong();
 			String winnerAllyId = ligne.next();
 			String loserId = ligne.next();
 			String loserAllyId = ligne.next();
 			long score = ligne.nextLong();
 			
-			
-			
+			Date date = new Date(dateLong*1000);
+			Logger.info("ig:"+dateLong+", last:"+lastDate.getTime()+", trans:"+date.getTime()+" today:"+now.getTime());
 			if(date.after(lastDate)){
 				Conquer conquer = new Conquer();
 				conquer.town = Town.find("byIgId", townId).first();
 				conquer.date = date;
 				conquer.winner = Player.find("byIgId", winnerId).first();
-			
+				Logger.info("ben si !!!!");
 			
 				if (!loserId.equals("")) {
 					conquer.loser =  Player.find("byIgId", Long.valueOf(loserId)).first();
@@ -413,11 +415,13 @@ public class Populator extends Job {
 				JPA.em().clear();
 			}
 			ligne.close();
+			
 		}
 		scanner.close();
 		Logger.info("done");
 		return true;
 	}
+
 }
 	
 	
