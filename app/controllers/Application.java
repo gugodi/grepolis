@@ -10,8 +10,7 @@ import models.*;
 public class Application extends Controller {
 
     public static void index() {
-    	List<Player> players = Player.findAll();
-        render(players);
+    	
     }
 
 }

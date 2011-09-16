@@ -9,7 +9,7 @@ public class BasicTest extends UnitTest {
 
     @Test
     public void runJob() {
-        new Populator();
+        new Populator().now();
         
     }
 
