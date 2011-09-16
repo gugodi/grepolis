@@ -195,29 +195,39 @@ public class Populator extends Job {
 		scanner = new Scanner(conquerIn).useDelimiter("\n");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
+			
+			long townId = ligne.nextLong();
+			long date = ligne.nextLong();
+			long winnerId = ligne.nextLong();
+			String winnerAllyId = ligne.next();
+			String loserId = ligne.next();
+			String loserAllyId = ligne.next();
+			long score = ligne.nextLong();
+			
 			Conquer conquer = new Conquer();
 			
-			conquer.town = Town.find("byIgId", ligne.nextLong()).first();
+			
+			conquer.town = Town.find("byIgId", townId).first();
 			conquer.date = new Date(ligne.nextLong());
-			conquer.winner = Player.find("byIgId", ligne.nextLong()).first();
+			conquer.winner = Player.find("byIgId", winnerId).first();
 						
-			String loserId = ligne.next();
+			
 			if (!loserId.equals("")) {
 				conquer.loser =  Player.find("byIgId", Long.valueOf(loserId)).first();
 			}
 			
-			String winnerAllyId = ligne.next();
+			
 			if (!winnerAllyId.equals("")) {
 				conquer.winnerAlly =  Ally.find("byIgId", Long.valueOf(winnerAllyId)).first();
 			}
 			
-			String loserAllyId = ligne.next();
+			
 			if (!loserAllyId.equals("")) {
 				conquer.loserAlly =  Ally.find("byIgId", Long.valueOf(loserAllyId)).first();
 			}
 			
 			Logger.info(String.valueOf(conquer.town.igId)) ;
-			conquer.score = ligne.nextLong();
+			conquer.score = score;
 						
 			conquer.save();
 			
