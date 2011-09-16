@@ -216,7 +216,7 @@ public class Populator extends Job {
 				conquer.loserAlly =  Ally.find("byIgId", Long.valueOf(loserAllyId)).first();
 			}
 			
-			
+			Logger.info(String.valueOf(conquer.town.igId)) ;
 			conquer.score = ligne.nextLong();
 						
 			conquer.save();
