@@ -27,6 +27,24 @@ public class Player extends Model {
 	public long score;
 	
         @Expose
+	public long scoreAll;
+        
+        @Expose
+	public long scoreAtt;
+        
+        @Expose
+	public long scoreDef;
+        
+        @Expose
+	public long rankAll;
+        
+        @Expose
+	public long rankAtt;
+        
+        @Expose
+	public long rankDef;
+        
+        @Expose
         public long rank;
         
         @ManyToOne
@@ -44,4 +62,22 @@ public class Player extends Model {
         
         @OneToMany(mappedBy="player")
 	public List<PlayerScore> history;
+        
+        @Expose
+        @Transient
+        public String allyName;
+        
+        @Expose
+        @Transient
+        public int townCount;
+        
+        
+        public String getAllyName() {
+            return ally.name;
+        }
+
+        public int getTownCount() {
+            return towns.size();
+        }
+        
 }

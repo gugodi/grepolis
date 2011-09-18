@@ -11,9 +11,7 @@ import java.util.*;
 @Entity
 public class Town extends Model {
     
-	@Required
-	public Date date;
-	
+		
 	@Required
 	public long igId;
 	
@@ -40,7 +38,4 @@ public class Town extends Model {
 	@OneToMany(mappedBy="town")
 	public List<Conquer> conquers;
 	
-	public Town(Date date) {
-		this.date = date;
-	}
 }

@@ -22,7 +22,7 @@ import play.Logger;
 
 import models.*;
 
-@Every("1h")
+@OnApplicationStart(async=true)
 public class Populator extends Job {
 	
 	
@@ -30,13 +30,15 @@ public class Populator extends Job {
 		
 		AllyPop();
                 PlayerPop();
+                TownPop();
+                ConquerPop();
 		
 		
 	}
 	
 	private boolean AllyPop() {
 		
-                Ally.deleteAll();
+                
                 Date now = new Date();
 		URL allyUrl;
 		URL allyUrlAll;
@@ -74,10 +76,12 @@ public class Populator extends Job {
 		
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			Ally ally = new Ally();
 			
 			
-			ally.igId = ligne.nextLong();
+			Long igId = ligne.nextLong();
+                        Ally ally = Ally.find("byIgId", igId).first();
+                        if(ally == null) ally = new Ally();
+                        ally.igId = igId;
 			try {
 				ally.name = URLDecoder.decode(ligne.next(), "UTF-8");
 			} 
@@ -112,13 +116,16 @@ public class Populator extends Job {
 		scanner = new Scanner(allyInAll).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			ligne.next();
+			long rank = ligne.nextLong();
 			long allyId = ligne.nextLong();
 			long score = ligne.nextLong();			
 			Ally ally = Ally.find("byIgId", allyId).first();
                         AllyScore allyScore = ally.history.get(ally.history.size() - 1);
 			allyScore.scoreAll = score;
+                        allyScore.rankAll = rank;
                         allyScore.save();
+                        ally.scoreAll = score;
+                        ally.save();
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
@@ -132,13 +139,16 @@ public class Populator extends Job {
 		scanner = new Scanner(allyInAtt).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			ligne.next();
+                        long rank = ligne.nextLong();
 			long allyId = ligne.nextLong();
-			long score = ligne.nextLong();			
-			Ally ally = Ally.find("byIgId", allyId).first();
+			long score = ligne.nextLong();
+                        Ally ally = Ally.find("byIgId", allyId).first();
                         AllyScore allyScore = ally.history.get(ally.history.size() - 1);
 			allyScore.scoreAtt = score;
+                        allyScore.rankAtt = rank;
                         allyScore.save();
+                        ally.scoreAtt = score;
+                        ally.save();
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
@@ -152,13 +162,16 @@ public class Populator extends Job {
 		scanner = new Scanner(allyInDef).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			ligne.next();
+                        long rank = ligne.nextLong();
 			long allyId = ligne.nextLong();
 			long score = ligne.nextLong();			
 			Ally ally = Ally.find("byIgId", allyId).first();
                         AllyScore allyScore = ally.history.get(ally.history.size() - 1);
 			allyScore.scoreDef = score;
+                        allyScore.rankDef = rank;
                         allyScore.save();
+                        ally.scoreDef = score;
+                        ally.save();
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
@@ -173,7 +186,7 @@ public class Populator extends Job {
 	
 	public boolean PlayerPop() {
             
-                Player.deleteAll();
+                
                 Date now = new Date();
 		URL playerUrl;
 		URL playerUrlAll;
@@ -208,9 +221,10 @@ public class Populator extends Job {
 		Scanner scanner = new Scanner(playerIn).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			Player player = new Player();
-			
-			player.igId = ligne.nextLong();
+			Long igId = ligne.nextLong();
+                        Player player = Player.find("byIgId", igId).first();
+                        if(player == null) player = new Player();
+                        player.igId = igId;        
 			
 			try {
 				player.name = URLDecoder.decode(ligne.next(), "UTF-8");
@@ -246,13 +260,16 @@ public class Populator extends Job {
 		scanner = new Scanner(playerInAll).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-		    ligne.next();
+                        long rank = ligne.nextLong();
 			long playerId = ligne.nextLong();
 			long score = ligne.nextLong();
 			Player player = Player.find("byIgId", playerId).first();;
                         PlayerScore playerScore = player.history.get(player.history.size() - 1);
 			playerScore.scoreAll = score;
+                        playerScore.rankAll = rank;
                         playerScore.save();
+                        player.scoreAll = score;
+                        player.save();
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
@@ -266,13 +283,16 @@ public class Populator extends Job {
 		scanner = new Scanner(playerInAtt).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			ligne.next();
+                        long rank = ligne.nextLong();
 			long playerId = ligne.nextLong();
 			long score = ligne.nextLong();
 			Player player = Player.find("byIgId", playerId).first();;
                         PlayerScore playerScore = player.history.get(player.history.size() - 1);
 			playerScore.scoreAtt = score;
+                        playerScore.rankAtt = rank;
                         playerScore.save();
+                        player.scoreAtt = score;
+                        player.save();
 			i++;
 			if (i % 1000 == 0) {
 				JPA.em().flush();
@@ -286,13 +306,16 @@ public class Populator extends Job {
 		scanner = new Scanner(playerInDef).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			ligne.next();
+                        long rank = ligne.nextLong();
 			long playerId = ligne.nextLong();
 			long score = ligne.nextLong();
 			Player player = Player.find("byIgId", playerId).first();;
                         PlayerScore playerScore = player.history.get(player.history.size() - 1);
-			playerScore.scoreAll = score;
+			playerScore.scoreDef = score;
+                        playerScore.rankDef = rank;
                         playerScore.save();
+                        player.scoreDef = score;
+                        player.save();
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
@@ -307,7 +330,7 @@ public class Populator extends Job {
 	
 	public boolean TownPop() {
 		
-                Town.deleteAll();
+                
 		URL townUrl;
 		
 		try {
@@ -330,8 +353,13 @@ public class Populator extends Job {
 		Scanner scanner = new Scanner(townIn).useDelimiter(",");
 		while(scanner.hasNext()){
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			Town town = new Town(new Date());
+			
 			long igId = ligne.nextLong();
+                        Town town = Town.find("byIgId", igId).first();
+                        if(town == null) town = new Town();
+                        town.igId = igId; 
+                        
+                        
 			String playerId = ligne.next();
 			String name = ligne.next();
 			int x = ligne.nextInt();

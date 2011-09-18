@@ -1,5 +1,6 @@
 package models;
 
+import com.google.gson.annotations.*;
 import play.*;
 import play.db.jpa.*;
 import play.data.validation.*;
@@ -22,6 +23,25 @@ public class Ally extends Model {
 	public long score;
 	
         public long rank;
+        
+        @Expose
+	public long scoreAll;
+        
+        @Expose
+	public long scoreAtt;
+        
+        @Expose
+	public long scoreDef;
+        
+        @Expose
+	public long rankAll;
+        
+        @Expose
+	public long rankAtt;
+        
+        @Expose
+	public long rankDef;
+        
 	@OneToMany(mappedBy="ally")
 	public List<Player> players;
 	

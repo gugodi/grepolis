@@ -1,32 +1,45 @@
+<div >
 <table id="main">
     <thead>
-        <th>Name</th>
-        <th>Score</th>
-        <th>Date</th>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Score</th>
+           
+            <th>Villages</th>
+            <th>Rank Combat</th>
+            <th>Score Combat</th>
+            <th>Rank Attaque</th>
+            <th>Score Attaque</th>
+            <th>Rank Defense</th>
+            <th>Score Defense</th>
+        </tr>
     </thead>
     <tbody>
-        #{list items:players, as:player}
-        <tr>
-            <td>${player.name}</td>
-            <td>${player.score}</td>
-            <td>${player.date}</td>
-        </tr>
-        #{/list}
     </tbody>
 </table>
+</div>
 <script type="text/javascript" >
     $(document).ready(function() {
         $('#main').dataTable({
             "bJQueryUI": true,
-            "bAutoWidth": true,
             "bServerSide": true,
             "bProcessing": true,
-            "sAjaxSource": "@{Application.ranking}",
+            "bAutoWidth": false,
+            "sAjaxSource": "@@{Application.ranking}",
             "sPaginationType": "full_numbers" ,
             "aoColumns": [
-                            { "mDataProp": "name" },
-                            { "mDataProp": "score" },
-                            { "mDataProp": "date" }
+                            { "mDataProp": "rank", "sWidth":"5%" },
+                            { "mDataProp": "name", "sWidth":"30%" },
+                            { "mDataProp": "score", "sWidth":"10%"},
+                            
+                            { "mDataProp": "townCount", "sWidth":"10%"},
+                            { "mDataProp": "rankAll", "sWidth":"5%"},
+                            { "mDataProp": "scoreAll", "sWidth":"10%"},
+                            { "mDataProp": "rankAtt", "sWidth":"5%"},
+                            { "mDataProp": "scoreAtt", "sWidth":"10%"},
+                            { "mDataProp": "rankDef", "sWidth":"5%"},
+                            { "mDataProp": "scoreDef", "sWidth":"10%"},
             ]
         });    
     

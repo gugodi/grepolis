@@ -35,6 +35,15 @@ public class PlayerScore extends Model {
         @Expose
 	public long scoreDef;
         
+        @Expose
+	public long rankAll;
+        
+        @Expose
+	public long rankAtt;
+        
+        @Expose
+	public long rankDef;
+        
         @ManyToOne
         @JoinColumn()
         public Player player;
