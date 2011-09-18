@@ -29,6 +29,7 @@ public class Application extends Controller {
         String from = " FROM Player p";
         String orderBy = " ORDER BY ";
         String select = "SELECT p";
+        String where = " WHERE p.* like %"+sSearch+"% ";
         
         for(int i = 0;i < iSortingCols;i++) {
             Long col = Long.valueOf(params.get("iSortCol_"+i));
@@ -37,7 +38,7 @@ public class Application extends Controller {
         }
         
         Logger.info(select+from+orderBy);
-        String query = select+from+orderBy;
+        String query = select+from+where+orderBy;
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         Collection<Player> results = Player.find(query).from(iDisplayStart).fetch(iDisplayLength);
         long l = Player.count();
