@@ -1,5 +1,6 @@
 package models;
 
+import com.google.gson.annotations.*;
 import play.*;
 import play.db.jpa.*;
 import play.data.validation.*;
@@ -13,25 +14,19 @@ import java.util.*;
 @Entity
 public class Player extends Model {
 	
-	@Required
-	public Date date;
-	
+        @Expose
 	@Required
 	public long igId;
 	
+        @Expose
 	@Required
 	public String name;
 	
+        @Expose
 	@Required
 	public long score;
 	
-	public long scoreAll;
-	
-	public long scoreAtt;
-	
-	public long scoreDef;
-    
-	@ManyToOne
+        @ManyToOne
 	@JoinColumn()
 	public Ally ally;
 	
@@ -43,9 +38,7 @@ public class Player extends Model {
 	
 	@OneToMany(mappedBy="loser")
 	public List<Conquer> losses;
-
-	public Player(Date date) {
-		this.date = date;
-	}
-	
+        
+        @OneToMany(mappedBy="player")
+	public List<PlayerScore> history;
 }

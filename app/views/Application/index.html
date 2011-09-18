@@ -1,8 +1,18 @@
 #{extends 'main.html' /}
 #{set title:'Home' /}
 
-#{list items:players, as:'player'}
-${player.name}
-#{/list}
-#{else}No tasks on the list#{/else}
-#{welcome /}
+#{set 'north'}
+<h1>ArgonauTool</h1>
+#{/set}
+
+#{set 'east'}
+
+#{/set}
+
+#{set 'west'}
+<h1>ArgonauTool</h1>
+#{/set}
+
+#{set 'center'}
+#{ranking /}
+#{/set}

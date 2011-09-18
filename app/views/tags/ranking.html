@@ -1,0 +1,35 @@
+<table id="main">
+    <thead>
+        <th>Name</th>
+        <th>Score</th>
+        <th>Date</th>
+    </thead>
+    <tbody>
+        #{list items:players, as:player}
+        <tr>
+            <td>${player.name}</td>
+            <td>${player.score}</td>
+            <td>${player.date}</td>
+        </tr>
+        #{/list}
+    </tbody>
+</table>
+<script type="text/javascript" >
+    $(document).ready(function() {
+        $('#main').dataTable({
+            "bJQueryUI": true,
+            "bAutoWidth": true,
+            "bServerSide": true,
+            "bProcessing": true,
+            "sAjaxSource": "@{Application.ranking}",
+            "sPaginationType": "full_numbers" ,
+            "aoColumns": [
+                            { "mDataProp": "name" },
+                            { "mDataProp": "score" },
+                            { "mDataProp": "date" }
+            ]
+        });    
+    
+    });
+</script>
+    

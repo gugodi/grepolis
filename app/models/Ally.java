@@ -11,8 +11,6 @@ import java.util.*;
 @Entity
 public class Ally extends Model {
 	
-	@Required
-	public Date date;
     
 	@Required
 	public long igId;
@@ -23,13 +21,6 @@ public class Ally extends Model {
 	@Required
 	public long score;
 	
-	public long scoreAll;
-	
-	public long scoreAtt;
-	
-	public long scoreDef;
-    
-		
 	@OneToMany(mappedBy="ally")
 	public List<Player> players;
 	
@@ -39,7 +30,6 @@ public class Ally extends Model {
 	@OneToMany(mappedBy="loserAlly")
 	public List<Conquer> losses;
 	
-	public Ally(Date date) {
-		this.date = date;
-	}
+        @OneToMany(mappedBy="ally")
+	public List<AllyScore> history;
 }

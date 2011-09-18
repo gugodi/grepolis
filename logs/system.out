@@ -1,65 +1,8 @@
 Listening for transport dt_socket at address: 8000
-21:25:28,536 INFO  ~ Starting C:\Users\memo\PLAY\play-1.2.3\grepolis
-21:25:29,985 WARN  ~ You're running Play! in DEV mode
-21:25:30,252 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
-21:25:35,870 INFO  ~ Connected to jdbc:mysql://localhost/test?useUnicode=yes&characterEncoding=UTF-8&connectionCollation=utf8_general_ci
-21:25:38,889 INFO  ~ Application 'grepolis' is now started !
-21:25:40,920 INFO  ~ -----Alliances:-----
-21:25:44,266 INFO  ~ done
-21:25:44,266 INFO  ~ -----AllyAll:-----
-21:25:47,819 INFO  ~ done
-21:25:47,819 INFO  ~ -----AllyAtt:-----
-21:25:50,376 INFO  ~ done
-21:25:50,376 INFO  ~ -----AllyDef:-----
-21:25:53,894 INFO  ~ done
-21:25:56,054 INFO  ~ -----Joueurs:-----
-21:26:32,100 INFO  ~ done
-21:26:32,100 INFO  ~ -----PlayerAll:-----
-21:27:55,126 INFO  ~ done
-21:27:55,126 INFO  ~ -----PlayerAtt:-----
-21:29:58,638 INFO  ~ done
-21:29:58,638 INFO  ~ -----PlayerDef:-----
-21:31:07,723 INFO  ~ done
-21:31:08,239 INFO  ~ -----Villages:-----
-21:34:54,602 ERROR ~ 
-
-@67mim9fci
-Error during job execution (jobs.Populator)
-
-Execution exception (In /app/jobs/Populator.java around line 310)
-InputMismatchException occured : null
-
-play.exceptions.JavaExecutionException
-	at play.jobs.Job.call(Job.java:155)
-	at Invocation.Job(Play!)
-Caused by: java.util.InputMismatchException
-	at java.util.Scanner.throwFor(Unknown Source)
-	at java.util.Scanner.next(Unknown Source)
-	at java.util.Scanner.nextInt(Unknown Source)
-	at java.util.Scanner.nextInt(Unknown Source)
-	at jobs.Populator.TownPop(Populator.java:310)
-	at jobs.Populator.doJob(Populator.java:33)
-	at play.jobs.Job.doJobWithResult(Job.java:50)
-	at play.jobs.Job.call(Job.java:146)
-	... 1 more
-21:34:58,296 ERROR ~ 
-
-@67mim9fci
-Internal Server Error (500) for request GET /
-
-Execution exception (In /app/jobs/Populator.java around line 310)
-InputMismatchException occured : null
-
-play.exceptions.JavaExecutionException
-	at play.jobs.Job.call(Job.java:155)
-	at Invocation.Job(Play!)
-Caused by: java.util.InputMismatchException
-	at java.util.Scanner.throwFor(Unknown Source)
-	at java.util.Scanner.next(Unknown Source)
-	at java.util.Scanner.nextInt(Unknown Source)
-	at java.util.Scanner.nextInt(Unknown Source)
-	at jobs.Populator.TownPop(Populator.java:310)
-	at jobs.Populator.doJob(Populator.java:33)
-	at play.jobs.Job.doJobWithResult(Job.java:50)
-	at play.jobs.Job.call(Job.java:146)
-	... 1 more
+04:06:08,300 INFO  ~ Starting C:\Users\memo\PLAY\play-1.2.3\grepolis
+04:06:09,529 WARN  ~ You're running Play! in DEV mode
+04:06:09,753 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+04:06:24,982 INFO  ~ Connected to jdbc:mysql://localhost/test?useUnicode=yes&characterEncoding=UTF-8&connectionCollation=utf8_general_ci
+04:06:27,494 INFO  ~ Application 'grepolis' is now started !
+04:06:32,217 INFO  ~ SELECT p FROM Player p ORDER BY p.name asc
+04:10:14,557 INFO  ~ SELECT p FROM Player p ORDER BY p.name asc
