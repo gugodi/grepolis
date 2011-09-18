@@ -21,6 +21,7 @@ public class Ally extends Model {
 	@Required
 	public long score;
 	
+        public long rank;
 	@OneToMany(mappedBy="ally")
 	public List<Player> players;
 	

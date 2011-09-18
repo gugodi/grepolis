@@ -87,6 +87,10 @@ public class Populator extends Job {
 			
                      
 			ally.score = ligne.nextLong();
+                        ligne.nextLong();
+                        ligne.nextLong();
+                        ally.rank = ligne.nextLong();
+                        
                         ally.save();
 			AllyScore allyScore = new AllyScore();
                         allyScore.score = ally.score;
@@ -221,6 +225,7 @@ public class Populator extends Job {
 				player.ally =  Ally.find("byIgId", Long.valueOf(allyId)).first();
 			}
 			player.score = ligne.nextLong();
+                        player.rank = ligne.nextLong();
                         player.save();
 			PlayerScore playerScore = new PlayerScore();
                         playerScore.score = player.score;

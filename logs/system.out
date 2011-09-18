@@ -6,3 +6,4 @@ Listening for transport dt_socket at address: 8000
 04:06:27,494 INFO  ~ Application 'grepolis' is now started !
 04:06:32,217 INFO  ~ SELECT p FROM Player p ORDER BY p.name asc
 04:10:14,557 INFO  ~ SELECT p FROM Player p ORDER BY p.name asc
+04:23:36,180 INFO  ~ SELECT p FROM Player p ORDER BY p.name asc

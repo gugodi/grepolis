@@ -26,6 +26,9 @@ public class Player extends Model {
 	@Required
 	public long score;
 	
+        @Expose
+        public long rank;
+        
         @ManyToOne
 	@JoinColumn()
 	public Ally ally;
