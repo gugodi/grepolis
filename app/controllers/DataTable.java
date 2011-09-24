@@ -1,17 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package controllers;
 
-import com.google.gson.annotations.*;
-/**
- *
- * @author memo
- */
-public class DataTable {
-    
-    @Expose
+import java.util.Collection;
+import java.util.List;
+
+import com.google.gson.annotations.Expose;
+
+public class DataTable<T> {
+
+	@Expose
     private long iTotalRecords;
     
     @Expose
@@ -19,13 +15,16 @@ public class DataTable {
     
     @Expose
     private int sEcho;
+    
+    private Collection<T> aaData;
   
     
-    public DataTable(long iTotalRecords, long iTotalDisplayRecords, int sEcho) {
+    public DataTable(long iTotalRecords, long iTotalDisplayRecords, int sEcho, Collection<T> aaData) {
         
         this.iTotalRecords = iTotalRecords;
         this.iTotalDisplayRecords = iTotalDisplayRecords;
         this.sEcho = sEcho;
+        this.aaData = aaData;
         
     }
 
@@ -52,6 +51,12 @@ public class DataTable {
     public void setsEcho(int sEcho) {
         this.sEcho = sEcho;
     }
-    
-    
+
+    public Collection<T> getAaData() {
+        return aaData;
+    }
+
+    public void setAaData(Collection<T> aaData) {
+        this.aaData = aaData;
+    }
 }

@@ -11,7 +11,8 @@ import java.net.URLDecoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.zip.GZIPInputStream;
 import play.jobs.*;
@@ -22,38 +23,39 @@ import play.Logger;
 
 import models.*;
 
-@OnApplicationStart(async=true)
+@OnApplicationStart
+@Every("1h")
 public class Populator extends Job {
 	
 	
 	public void doJob() {
 		
-		AllyPop();
-                PlayerPop();
-                TownPop();
-                ConquerPop();
+		Date now = new Date();
 		
-		
+		AllyPop(now);
+        PlayerPop(now);
+        TownPop(now);
+        ConquerPop();
+        
 	}
 	
-	private boolean AllyPop() {
+	private void AllyPop(Date now) {
+		Logger.info(">>>>>Ally<<<<<");
 		
-                
-                Date now = new Date();
+		Logger.info("Fetch files");
 		URL allyUrl;
 		URL allyUrlAll;
 		URL allyUrlAtt;
 		URL allyUrlDef;
+		
 		try {
 			allyUrl = new URL("http://fr16.grepolis.com/data/alliances.txt.gz");
 			allyUrlAll = new URL("http://fr16.grepolis.com/data/alliance_kills_all.txt.gz");
 			allyUrlAtt = new URL("http://fr16.grepolis.com/data/alliance_kills_att.txt.gz");
 			allyUrlDef = new URL("http://fr16.grepolis.com/data/alliance_kills_def.txt.gz");
 		} 
-		catch (MalformedURLException e) {
-			
-			throw new RuntimeException(e);
-		}
+		catch (MalformedURLException e) {throw new RuntimeException(e);}
+		
 		GZIPInputStream allyIn = null;
 		GZIPInputStream allyInAll = null;
 		GZIPInputStream allyInAtt = null;
@@ -65,186 +67,296 @@ public class Populator extends Job {
 			allyInAtt = new GZIPInputStream((InputStream) allyUrlAtt.getContent());
 			allyInDef = new GZIPInputStream((InputStream) allyUrlDef.getContent());
 		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		
+		catch (IOException e) {throw new RuntimeException(e);}
+		
+		Logger.info("->done");
+		
 		int i = 0;
 		
+		Logger.info("alliances.txt");
 		Scanner scanner = new Scanner(allyIn).useDelimiter(",");
-		Logger.info("-----Alliances:-----");
 		
-		
+
 		while(scanner.hasNext()){
-			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
+			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
 			Long igId = ligne.nextLong();
-                        Ally ally = Ally.find("byIgId", igId).first();
-                        if(ally == null) ally = new Ally();
-                        ally.igId = igId;
-			try {
-				ally.name = URLDecoder.decode(ligne.next(), "UTF-8");
-			} 
-			catch (UnsupportedEncodingException e) {
-				throw new RuntimeException(e);
-			}
+			String name = ligne.next();
+			Long score = ligne.nextLong();
+			ligne.nextLong();
+            ligne.nextLong();
+            ligne.nextLong();
 			
-                     
-			ally.score = ligne.nextLong();
-                        ligne.nextLong();
-                        ligne.nextLong();
-                        ally.rank = ligne.nextLong();
-                        
-                        ally.save();
-			AllyScore allyScore = new AllyScore();
-                        allyScore.score = ally.score;
-                        allyScore.date = now;
-                        allyScore.ally = ally;
-                        allyScore.save();
+            ligne.close();
+            
+            Ally ally = Ally.find("byIgId", igId).first();
+            
+            if(ally == null){
+            	ally = new Ally();
+            	ally.igId = igId;
+            }
+            
+			try {ally.name = URLDecoder.decode(name, "UTF-8");} 
+			catch (UnsupportedEncodingException e) {throw new RuntimeException(e);}
 			
-                        
+			ally.score = score;
+            ally.save();
+            
+            AllyScore allyScore = new AllyScore();
+            allyScore.score = ally.score;
+            allyScore.date = now;
+            allyScore.ally = ally;
+            allyScore.save();
+                                    
 			i++;
+
 			if (i % 20 == 0) {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
-			ligne.close();
+			
+			
 		}
 		scanner.close();
-		Logger.info("done");
-		Logger.info("-----AllyAll:-----");
+		Logger.info("->done");
+		
+		Logger.info("alliance_kills_all.txt");		
 		scanner = new Scanner(allyInAll).useDelimiter(",");
+		
 		while(scanner.hasNext()){
+			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-			long rank = ligne.nextLong();
+			
+			ligne.nextLong();
 			long allyId = ligne.nextLong();
-			long score = ligne.nextLong();			
+			long score = ligne.nextLong();	
+			
 			Ally ally = Ally.find("byIgId", allyId).first();
-                        AllyScore allyScore = ally.history.get(ally.history.size() - 1);
-			allyScore.scoreAll = score;
-                        allyScore.rankAll = rank;
-                        allyScore.save();
-                        ally.scoreAll = score;
-                        ally.save();
+			ally.scoreAll = score;
+            ally.save();
+            
+            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
+            allyScore.scoreAll = score;
+            allyScore.save();
+            
+				
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
+			
 			ligne.close();
 		}
 		scanner.close();
-		Logger.info("done");
-		Logger.info("-----AllyAtt:-----");
+		Logger.info("->done");
+		
+		Logger.info("alliance_kills_att.txt");
 		scanner = new Scanner(allyInAtt).useDelimiter(",");
+		
 		while(scanner.hasNext()){
+			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-                        long rank = ligne.nextLong();
+			
+			ligne.nextLong();
 			long allyId = ligne.nextLong();
-			long score = ligne.nextLong();
-                        Ally ally = Ally.find("byIgId", allyId).first();
-                        AllyScore allyScore = ally.history.get(ally.history.size() - 1);
-			allyScore.scoreAtt = score;
-                        allyScore.rankAtt = rank;
-                        allyScore.save();
-                        ally.scoreAtt = score;
-                        ally.save();
-			i++;
-			if (i % 20 == 0) {
-				JPA.em().flush();
-				JPA.em().clear();
-			}
-			ligne.close();
-		}
-		scanner.close();
-		Logger.info("done");
-		Logger.info("-----AllyDef:-----");
-		scanner = new Scanner(allyInDef).useDelimiter(",");
-		while(scanner.hasNext()){
-			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-                        long rank = ligne.nextLong();
-			long allyId = ligne.nextLong();
-			long score = ligne.nextLong();			
+			long score = ligne.nextLong();	
+			
 			Ally ally = Ally.find("byIgId", allyId).first();
-                        AllyScore allyScore = ally.history.get(ally.history.size() - 1);
-			allyScore.scoreDef = score;
-                        allyScore.rankDef = rank;
-                        allyScore.save();
-                        ally.scoreDef = score;
-                        ally.save();
+			ally.scoreAtt = score;
+            ally.save();
+            
+            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
+            allyScore.scoreAtt = score;
+            allyScore.save();
+				
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
+			
+			ligne.close();
+		}
+		
+		scanner.close();
+		Logger.info("->done");
+		
+		Logger.info("alliance_kills_def.txt");
+		scanner = new Scanner(allyInDef).useDelimiter(",");
+		
+		while(scanner.hasNext()){
+			
+			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
+			
+			ligne.nextLong();
+			long allyId = ligne.nextLong();
+			long score = ligne.nextLong();	
+			
+			Ally ally = Ally.find("byIgId", allyId).first();
+			ally.scoreDef = score;
+            ally.save();
+
+            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
+            allyScore.scoreDef = score;
+            allyScore.save();
+				
+			i++;
+			if (i % 20 == 0) {
+				JPA.em().flush();
+				JPA.em().clear();
+			}
+			
 			ligne.close();
 		}
 		scanner.close();
-		Logger.info("done");
-		return true;
+		Logger.info("->done");
+		
+		Logger.info(">>>>>Done<<<<<");
+		
 	}
 	
-	public boolean PlayerPop() {
-            
-                
-                Date now = new Date();
+	private void PlayerPop(Date now) {
+		Logger.info(">>>>>Player<<<<<");
+		
+		Logger.info("Fetch files");
 		URL playerUrl;
 		URL playerUrlAll;
 		URL playerUrlAtt;
 		URL playerUrlDef;
+		
 		try {
 			playerUrl = new URL("http://fr16.grepolis.com/data/players.txt.gz");
 			playerUrlAll = new URL("http://fr16.grepolis.com/data/player_kills_all.txt.gz");
 			playerUrlAtt = new URL("http://fr16.grepolis.com/data/player_kills_att.txt.gz");
 			playerUrlDef = new URL("http://fr16.grepolis.com/data/player_kills_def.txt.gz");
-			} 
-		catch (MalformedURLException e) {
-			
-			throw new RuntimeException(e);
-		}
+		} 
+		catch (MalformedURLException e) {throw new RuntimeException(e);}
+		
 		GZIPInputStream playerIn = null;
 		GZIPInputStream playerInAll = null;
 		GZIPInputStream playerInAtt = null;
 		GZIPInputStream playerInDef = null;
+
 		try {
 			playerIn = new GZIPInputStream((InputStream) playerUrl.getContent());
 			playerInAll = new GZIPInputStream((InputStream) playerUrlAll.getContent());
 			playerInAtt = new GZIPInputStream((InputStream) playerUrlAtt.getContent());
 			playerInDef = new GZIPInputStream((InputStream) playerUrlDef.getContent());
 		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+		
+		catch (IOException e) {throw new RuntimeException(e);}
+		
+		Logger.info("->done");
+		
 		int i = 0;
 		
-		Logger.info("-----Joueurs:-----");
+		Logger.info("players.txt");
 		Scanner scanner = new Scanner(playerIn).useDelimiter(",");
+		
 		while(scanner.hasNext()){
+			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
+			
+			
 			Long igId = ligne.nextLong();
-                        Player player = Player.find("byIgId", igId).first();
-                        if(player == null) player = new Player();
-                        player.igId = igId;        
-			
-			try {
-				player.name = URLDecoder.decode(ligne.next(), "UTF-8");
-			} 
-			catch (UnsupportedEncodingException e) {
-				throw new RuntimeException(e);
-			}
-			
+			String name = ligne.next();
 			String allyId = ligne.next();
+			Long score = ligne.nextLong();
+			
+			ligne.close();
+            
+            Player player = Player.find("byIgId", igId).first();
+            
+            
+            if(player == null){
+            	player = new Player();
+            	player.igId = igId;
+            }
+            
+			try {player.name = URLDecoder.decode(name, "UTF-8");} 
+			catch (UnsupportedEncodingException e) {throw new RuntimeException(e);}
 			
 			if (!allyId.equals("")) {
-				player.ally =  Ally.find("byIgId", Long.valueOf(allyId)).first();
+				Ally ally =  Ally.find("byIgId", Long.valueOf(allyId)).first();
+				player.ally = ally;
 			}
-			player.score = ligne.nextLong();
-                        player.rank = ligne.nextLong();
-                        player.save();
-			PlayerScore playerScore = new PlayerScore();
-                        playerScore.score = player.score;
-                        playerScore.date = now;
-                        playerScore.player = player;
+                     
+			player.score = score;
+            player.save();
+			
+            PlayerScore playerScore = new PlayerScore();
+            playerScore.score = player.score;
+            playerScore.date = now;
+            playerScore.player = player;
+            if(player.ally != null){
+            	playerScore.allyScore = player.ally.history.get(player.ally.history.size() -1);
+			}
+           	playerScore.save();
+            
+			
+                                    
+			i++;
+
+			if (i % 20 == 0) {
+				JPA.em().flush();
+				JPA.em().clear();
+			}
+			
+			
+		}
+		scanner.close();
+		Logger.info("->done");
+		
+		Logger.info("player_kills_all.txt");		
+		scanner = new Scanner(playerInAll).useDelimiter(",");
+		
+		while(scanner.hasNext()){
+			
+			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
+			
+			ligne.nextLong();
+			long playerId = ligne.nextLong();
+			long score = ligne.nextLong();	
+			
+			Player player = Player.find("byIgId", playerId).first();
+			player.scoreAll = score;
+            player.save();
+
+            PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
+            playerScore.scoreAll = score;
+			playerScore.save();
+				
+			i++;
+			if (i % 20 == 0) {
+				JPA.em().flush();
+				JPA.em().clear();
+			}
+			
+			ligne.close();
+		}
+		scanner.close();
+		Logger.info("->done");
+		
+		Logger.info("player_kills_att.txt");
+		scanner = new Scanner(playerInAtt).useDelimiter(",");
+		
+		while(scanner.hasNext()){
+			
+			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
+			
+			ligne.nextLong();
+			long playerId = ligne.nextLong();
+			long score = ligne.nextLong();	
+			
+			Player player = Player.find("byIgId", playerId).first();
+			player.scoreAtt = score;
+            player.save();
+            
+            PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
+            playerScore.scoreAtt = score;
 			playerScore.save();
 			
 			i++;
@@ -252,128 +364,101 @@ public class Populator extends Job {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
+			
 			ligne.close();
 		}
+		
+		
 		scanner.close();
-		Logger.info("done");
-		Logger.info("-----PlayerAll:-----");
-		scanner = new Scanner(playerInAll).useDelimiter(",");
-		while(scanner.hasNext()){
-			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-                        long rank = ligne.nextLong();
-			long playerId = ligne.nextLong();
-			long score = ligne.nextLong();
-			Player player = Player.find("byIgId", playerId).first();;
-                        PlayerScore playerScore = player.history.get(player.history.size() - 1);
-			playerScore.scoreAll = score;
-                        playerScore.rankAll = rank;
-                        playerScore.save();
-                        player.scoreAll = score;
-                        player.save();
-			i++;
-			if (i % 20 == 0) {
-				JPA.em().flush();
-				JPA.em().clear();
-			}
-			ligne.close();
-		}
-		scanner.close();
-		Logger.info("done");
-		Logger.info("-----PlayerAtt:-----");
-		scanner = new Scanner(playerInAtt).useDelimiter(",");
-		while(scanner.hasNext()){
-			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-                        long rank = ligne.nextLong();
-			long playerId = ligne.nextLong();
-			long score = ligne.nextLong();
-			Player player = Player.find("byIgId", playerId).first();;
-                        PlayerScore playerScore = player.history.get(player.history.size() - 1);
-			playerScore.scoreAtt = score;
-                        playerScore.rankAtt = rank;
-                        playerScore.save();
-                        player.scoreAtt = score;
-                        player.save();
-			i++;
-			if (i % 1000 == 0) {
-				JPA.em().flush();
-				JPA.em().clear();
-			}
-			ligne.close();
-		}
-		scanner.close();
-		Logger.info("done");
-		Logger.info("-----PlayerDef:-----");
+		Logger.info("->done");
+		
+		Logger.info("player_kills_def.txt");
 		scanner = new Scanner(playerInDef).useDelimiter(",");
+		
 		while(scanner.hasNext()){
+			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
-                        long rank = ligne.nextLong();
+			
+			ligne.nextLong();
 			long playerId = ligne.nextLong();
-			long score = ligne.nextLong();
-			Player player = Player.find("byIgId", playerId).first();;
-                        PlayerScore playerScore = player.history.get(player.history.size() - 1);
-			playerScore.scoreDef = score;
-                        playerScore.rankDef = rank;
-                        playerScore.save();
-                        player.scoreDef = score;
-                        player.save();
+			long score = ligne.nextLong();	
+			
+			Player player = Player.find("byIgId", playerId).first();
+			player.scoreDef = score;
+            player.save();
+
+            PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
+            playerScore.scoreDef = score;
+			playerScore.save();
+			
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
+			
 			ligne.close();
 		}
 		scanner.close();
-		Logger.info("done");
-		return true;
+		Logger.info("->done");
+		
+		Logger.info(">>>>>Done<<<<<");
+		
 	}
 	
-	public boolean TownPop() {
+	private void TownPop(Date now) {
+		Logger.info(">>>>>Town<<<<<");
 		
-                
+		Logger.info("Fetch files");
 		URL townUrl;
 		
 		try {
 			townUrl = new URL("http://fr16.grepolis.com/data/towns.txt.gz");
 		} 
 		catch (MalformedURLException e) {
-			
 			throw new RuntimeException(e);
 		}
+		
 		GZIPInputStream townIn = null;
+		
 		try {
-			townIn = new GZIPInputStream((InputStream) townUrl.getContent());
-			
+			townIn = new GZIPInputStream((InputStream) townUrl.getContent());		
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		
+		Logger.info("->done");
+		
 		int i = 0;
-		Logger.info("-----Villages:-----");
+		
+		Logger.info("towns.txt");
 		Scanner scanner = new Scanner(townIn).useDelimiter(",");
+		
 		while(scanner.hasNext()){
+			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
 			long igId = ligne.nextLong();
-                        Town town = Town.find("byIgId", igId).first();
-                        if(town == null) town = new Town();
-                        town.igId = igId; 
-                        
-                        
 			String playerId = ligne.next();
 			String name = ligne.next();
 			int x = ligne.nextInt();
 			int y = ligne.nextInt();
 			long position = ligne.nextLong();
 			long score = ligne.nextLong();
-			town.igId = igId;
+			
+			ligne.close();
 			
 			
+            Town town = Town.find("byIgId", igId).first();
+            if(town == null) {
+            	town = new Town();
+            	town.igId = igId; 
+            }
+            
 			if (!playerId.equals("")) {
-				town.player =  Player.find("byIgId", Long.valueOf(playerId)).first();
-				/*if(town.player.ally != null){
-					town.ally = town.player.ally;
-				}*/
+				Player player =  Player.find("byIgId", Long.valueOf(playerId)).first();
+				town.player = player;
 			}
 			
 			try {
@@ -382,27 +467,38 @@ public class Populator extends Job {
 			catch (UnsupportedEncodingException e) {
 				throw new RuntimeException(e);
 			}
+			
 			town.x = x;
 			town.y = y;
 			town.position = position;
 			town.score = score;
-			
 			town.save();
+			
+			TownScore townScore = new TownScore();
+			townScore.date = now;
+			townScore.town = town;
+			if (!playerId.equals("")){
+			townScore.playerScore = town.player.history.get(town.player.history.size() -1);
+			}
+			townScore.save();
+			
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
-			ligne.close();
+			
 		}
 		scanner.close();
-		Logger.info("done");
-		return true;
+		Logger.info("->done");
+		Logger.info(">>>>>Done<<<<<");
+		
 	}
 	
-	public boolean ConquerPop() {
+	private boolean ConquerPop() {
+		Logger.info(">>>>>Conquer<<<<<");
 		
-		Date now = new Date();
+		Logger.info("Fetch files");
 		URL conquerUrl;
 		
 		try {
@@ -420,9 +516,13 @@ public class Populator extends Job {
 		catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+		Logger.info("->done");
 		int i = 0;
-		Logger.info("-----Conquer:-----");
+		
+		Logger.info("conquers.txt");
+		
 		Scanner scanner = new Scanner(conquerIn).useDelimiter(",");
+		
 		Conquer lastConquer = Conquer.find("SELECT c FROM Conquer c ORDER BY c.date DESC").first();
 		Date lastDate = lastConquer == null ? new Date(0): lastConquer.date;
 		while(scanner.hasNext()){
@@ -436,30 +536,25 @@ public class Populator extends Job {
 			String loserAllyId = ligne.next();
 			long score = ligne.nextLong();
 			
+			ligne.close();
+			
 			Date date = new Date(dateLong*1000);
+			
 			if(date.after(lastDate)){
 				Conquer conquer = new Conquer();
 				conquer.town = Town.find("byIgId", townId).first();
 				conquer.date = date;
 				conquer.winner = Player.find("byIgId", winnerId).first();
-		
 				if (!loserId.equals("")) {
 					conquer.loser =  Player.find("byIgId", Long.valueOf(loserId)).first();
 				}
-				
-				
 				if (!winnerAllyId.equals("")) {
 					conquer.winnerAlly =  Ally.find("byIgId", Long.valueOf(winnerAllyId)).first();
 				}
-				
-				
 				if (!loserAllyId.equals("")) {
-					conquer.loserAlly =  Ally.find("byIgId", Long.valueOf(loserAllyId)).first();
+					conquer.loserAlly = Ally.find("byIgId", Long.valueOf(loserAllyId)).first();
 				}
-				
-				
 				conquer.score = score;
-							
 				conquer.save();
 			}
 			i++;
@@ -467,12 +562,33 @@ public class Populator extends Job {
 				JPA.em().flush();
 				JPA.em().clear();
 			}
-			ligne.close();
+			
 			
 		}
 		scanner.close();
 		Logger.info("done");
 		return true;
+	}
+	
+	public void CleanScore(Date now) {
+		
+		Date week = new Date(now.getTime() - 3600000*24*7);
+		
+		Collection<PlayerScore> playerScores= PlayerScore.find("date > ? ", week).fetch();
+		
+		for(Iterator iter = playerScores.iterator(); iter.hasNext();) {
+			
+			PlayerScore playerScore = (PlayerScore) iter.next();
+			Calendar instance = Calendar.getInstance();
+			instance.setTime(playerScore.date);
+						
+			if(instance.HOUR_OF_DAY != 0 ){
+				
+				playerScore.delete();
+			}
+			
+		}
+		
 	}
 
 }
