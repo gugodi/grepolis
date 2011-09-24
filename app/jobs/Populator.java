@@ -274,7 +274,6 @@ public class Populator extends Job {
             if(player == null){
             	player = new Player();
             	player.igId = igId;
-            	player
             }
             
 			try {player.name = URLDecoder.decode(name, "UTF-8");} 
