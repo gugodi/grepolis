@@ -20,3 +20,32 @@
 23:52:15,262 INFO  ~ players.txt
 23:54:23,466 INFO  ~ ->done
 23:54:23,466 INFO  ~ player_kills_all.txt
+23:56:13,721 INFO  ~ ->done
+23:56:13,721 INFO  ~ player_kills_att.txt
+23:57:27,237 INFO  ~ ->done
+23:57:27,237 INFO  ~ player_kills_def.txt
+23:59:03,287 INFO  ~ ->done
+23:59:03,287 INFO  ~ >>>>>Done<<<<<
+23:59:03,287 INFO  ~ >>>>>Town<<<<<
+23:59:03,287 INFO  ~ Fetch files
+23:59:03,698 INFO  ~ ->done
+23:59:03,698 INFO  ~ towns.txt
+00:15:16,651 ERROR ~ 
+
+@67oplp83o
+Error during job execution (jobs.Populator)
+
+Execution exception (In /app/jobs/Populator.java around line 444)
+NoSuchElementException occured : null
+
+play.exceptions.JavaExecutionException
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: java.util.NoSuchElementException
+	at java.util.Scanner.throwFor(Unknown Source)
+	at java.util.Scanner.next(Unknown Source)
+	at jobs.Populator.TownPop(Populator.java:444)
+	at jobs.Populator.doJob(Populator.java:37)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more

@@ -1,0 +1,52 @@
+<div >
+<table id="main">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Ally</th>
+            <th>Villages</th>
+            <th>Rank Combat</th>
+            <th>Score Combat</th>
+            <th>Rank Attaque</th>
+            <th>Score Attaque</th>
+            <th>Rank Defense</th>
+            <th>Score Defense</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</div>
+<script type="text/javascript" >
+    var oTable = $(document).ready(function() {
+        $('#main').dataTable({
+        	"iDisplayLength": 25,
+        	"bLengthChange": false,
+            "bJQueryUI": true,
+            "bServerSide": true,
+            "bProcessing": true,
+            "bAutoWidth": false,
+            "sAjaxSource": "@@{Ranking.playerTable}",
+            "sPaginationType": "full_numbers" ,
+            "aoColumns": [
+							{ "mDataProp": "rank", "sWidth":"5%", "bSortable": true },
+                            { "mDataProp": "name", "sWidth":"20%", "bSortable": false },
+                            { "mDataProp": "score", "sWidth":"10%", "bSortable": false},
+                            { "mDataProp": "ally", "sWidth":"20%", "bSortable": false},
+                            { "mDataProp": "townCount", "sWidth":"10%", "bSortable": false},
+                            { "mDataProp": "rankAll", "sWidth":"5%", "bSortable": true},
+                            { "mDataProp": "scoreAll", "sWidth":"10%", "bSortable": false},
+                            { "mDataProp": "rankAtt", "sWidth":"5%", "bSortable": true},
+                            { "mDataProp": "scoreAtt", "sWidth":"10%", "bSortable": false},
+                            { "mDataProp": "rankDef", "sWidth":"5%", "bSortable": true},
+                            { "mDataProp": "scoreDef", "sWidth":"10%", "bSortable": false},
+            ],
+            
+        });    
+    
+    });
+    
+</script>
+    
