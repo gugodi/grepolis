@@ -6,7 +6,7 @@ package controllers;
 
 import com.google.gson.annotations.*;
 
-import flexjson.JSONSerializer;
+import flexjson.*;
 
 import java.util.*;
 
