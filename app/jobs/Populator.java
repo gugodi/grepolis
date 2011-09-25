@@ -33,8 +33,8 @@ public class Populator extends Job {
 		
 		Date now = new Date();
 		
-		//AllyPop(now);
-        //PlayerPop(now);
+		AllyPop(now);
+        PlayerPop(now);
         TownPop(now);
         ConquerPop();
         
@@ -429,8 +429,8 @@ public class Populator extends Job {
 		Logger.info(">>>>>Town<<<<<");
 		
 		Logger.info("Fetch files");
-		try {
-                URL townUrl;
+		
+        URL townUrl;
 		
 		try {
 			townUrl = new URL("http://fr16.grepolis.com/data/towns.txt.gz");
@@ -440,29 +440,25 @@ public class Populator extends Job {
 		}
 		
 		GZIPInputStream townIn = null;
-                Reader decoder = null;
-		
-		try {
-			townIn = new GZIPInputStream((InputStream) townUrl.getContent());
-                        decoder = new InputStreamReader(townIn, "UTF-8");
-		}
-		catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-		
-		Logger.info("->done");
-		
-		int i = 0;
-		
-		Logger.info("towns.txt");
-		//Scanner scanner = new Scanner(townIn).useDelimiter(",");
                 
+		
+        try {
+        	townIn = new GZIPInputStream((InputStream) townUrl.getContent());
+    	}
+    	catch (IOException e) {
+        	throw new RuntimeException(e);
+    	}
 
-		BufferedReader in= new BufferedReader(decoder,2048);
-        String line = null;
-		while((line = in.readLine()) != null){
+    	Logger.info("->done");
+
+    	int i = 0;
+
+    	Logger.info("towns.txt");
+    	Scanner scanner = new Scanner(townIn).useDelimiter(",");
+
+    	while(scanner.hasNext()){
 			
-			Scanner ligne = new Scanner(line).useDelimiter(",");
+			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
 				long igId = ligne.nextLong();
 				String playerId = ligne.next();
@@ -516,13 +512,10 @@ public class Populator extends Job {
 			}
 			
 		}
-		//scanner.close();
+		scanner.close();
 		Logger.info("->done");
 		Logger.info(">>>>>Done<<<<<");
-                }
-                catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+                
 		
 	}
 	
