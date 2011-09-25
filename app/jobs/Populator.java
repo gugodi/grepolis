@@ -134,13 +134,13 @@ public class Populator extends Job {
 			long score = ligne.nextLong();	
 			
 			Ally ally = Ally.find("byIgId", allyId).first();
-			ally.scoreAll = score;
-            ally.save();
-            
-            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
-            allyScore.scoreAll = score;
-            allyScore.save();
-            
+			if (ally != null){
+				ally.scoreAll = score;
+				ally.save();
+			    AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
+			    allyScore.scoreAll = score;
+			    allyScore.save();
+			}
 				
 			i++;
 			if (i % 20 == 0) {
@@ -165,13 +165,14 @@ public class Populator extends Job {
 			long score = ligne.nextLong();	
 			
 			Ally ally = Ally.find("byIgId", allyId).first();
-			ally.scoreAtt = score;
-            ally.save();
-            
-            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
-            allyScore.scoreAtt = score;
-            allyScore.save();
-				
+			if (ally != null){
+				ally.scoreAtt = score;
+	            ally.save();
+	            
+	            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
+	            allyScore.scoreAtt = score;
+	            allyScore.save();
+			}
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();
@@ -196,13 +197,15 @@ public class Populator extends Job {
 			long score = ligne.nextLong();	
 			
 			Ally ally = Ally.find("byIgId", allyId).first();
-			ally.scoreDef = score;
-            ally.save();
-
-            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
-            allyScore.scoreDef = score;
-            allyScore.save();
+			if (ally != null){
 				
+				ally.scoreDef = score;
+	            ally.save();
+	
+	            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
+	            allyScore.scoreDef = score;
+	            allyScore.save();
+			}
 			i++;
 			if (i % 20 == 0) {
 				JPA.em().flush();

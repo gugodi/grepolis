@@ -45,20 +45,13 @@ public class Ranking extends Controller {
 
 				Long colId = Long.valueOf(params.get("iSortCol_0"));
 				String col = params.get("mDataProp_"+colId);
+				col = col.replace("rank", "score");
 				String sort = params.get("sSortDir_0");
 				String query = "order by "+col+" "+sort;
 				List<Player> players = Player.find(query).from(iDisplayStart).fetch(25);
 				DataTable<Player> response = new DataTable(Player.count(), Player.count() , sEcho, players);
 				JSONSerializer serializer = new JSONSerializer();
 				String test = serializer.include("aaData","aaData.townCount").serialize(response);
-				
-				
-				
-				
-				
-				Logger.info(col);
-				
-				
 				renderText(test);
 				
 			}
@@ -88,6 +81,7 @@ public class Ranking extends Controller {
 
 				Long colId = Long.valueOf(params.get("iSortCol_0"));
 				String col = params.get("mDataProp_"+colId);
+				col = col.replace("rank", "score");
 				String sort = params.get("sSortDir_0");
 				String query = "order by "+col+" "+sort;
 				List<Ally> allies = Ally.find(query).from(iDisplayStart).fetch(25);
