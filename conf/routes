@@ -12,5 +12,6 @@ GET     /favicon.ico                            404
 GET     /public/                                staticDir:public
 
 GET     /ranking.json                           application.ranking
+GET		/player/{id}							playerController.view
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}

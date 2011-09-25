@@ -1,5 +1,48 @@
-02:39:45,906 INFO  ~ Starting C:\Users\memo\PLAY\play-1.2.3\grepolis
-02:39:46,078 INFO  ~ Precompiling ...
-02:40:02,382 INFO  ~ Connected to jdbc:mysql://localhost/test?useUnicode=yes&characterEncoding=UTF-8&connectionCollation=utf8_general_ci
-02:40:08,311 INFO  ~ Application 'grepolis' is now started !
-02:40:08,593 INFO  ~ Listening for HTTP on port 9000 ...
+Listening for transport dt_socket at address: 8000
+16:35:37,244 INFO  ~ Starting C:\Users\memo\PLAY\play-1.2.3\grepolis
+16:35:38,636 WARN  ~ You're running Play! in DEV mode
+16:35:38,856 INFO  ~ Listening for HTTP on port 9000 (Waiting a first request to start) ...
+16:35:49,286 INFO  ~ Connected to jdbc:mysql://localhost/test?useUnicode=yes&characterEncoding=UTF-8&connectionCollation=utf8_general_ci
+16:35:53,239 INFO  ~ Application 'grepolis' is now started !
+16:35:53,531 INFO  ~ >>>>>Town<<<<<
+16:35:53,531 INFO  ~ Fetch files
+16:35:53,790 INFO  ~ ->done
+16:35:53,790 INFO  ~ towns.txt
+16:53:31,705 ERROR ~ 
+
+@67p4n170c
+Error during job execution (jobs.Populator)
+
+Execution exception (In /app/jobs/Populator.java around line 462)
+NullPointerException occured : null
+
+play.exceptions.JavaExecutionException
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: java.lang.NullPointerException
+	at java.io.StringReader.<init>(Unknown Source)
+	at java.util.Scanner.<init>(Unknown Source)
+	at jobs.Populator.TownPop(Populator.java:462)
+	at jobs.Populator.doJob(Populator.java:38)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more
+16:53:35,908 ERROR ~ 
+
+@67p4n170c
+Internal Server Error (500) for request GET /Ranking/Players
+
+Execution exception (In /app/jobs/Populator.java around line 462)
+NullPointerException occured : null
+
+play.exceptions.JavaExecutionException
+	at play.jobs.Job.call(Job.java:155)
+	at Invocation.Job(Play!)
+Caused by: java.lang.NullPointerException
+	at java.io.StringReader.<init>(Unknown Source)
+	at java.util.Scanner.<init>(Unknown Source)
+	at jobs.Populator.TownPop(Populator.java:462)
+	at jobs.Populator.doJob(Populator.java:38)
+	at play.jobs.Job.doJobWithResult(Job.java:50)
+	at play.jobs.Job.call(Job.java:146)
+	... 1 more

@@ -1,7 +1,8 @@
 package jobs;
 
-import java.io.FileInputStream;
+import java.io.*;
 import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -32,8 +33,8 @@ public class Populator extends Job {
 		
 		Date now = new Date();
 		
-		AllyPop(now);
-        PlayerPop(now);
+		//AllyPop(now);
+        //PlayerPop(now);
         TownPop(now);
         ConquerPop();
         
@@ -86,8 +87,8 @@ public class Populator extends Job {
 			String name = ligne.next();
 			Long score = ligne.nextLong();
 			ligne.nextLong();
-            ligne.nextLong();
-            ligne.nextLong();
+			ligne.nextLong();
+			Long rank = ligne.nextLong();
 			
             ligne.close();
             
@@ -102,10 +103,12 @@ public class Populator extends Job {
 			catch (UnsupportedEncodingException e) {throw new RuntimeException(e);}
 			
 			ally.score = score;
+			ally.rank = rank;
             ally.save();
             
             AllyScore allyScore = new AllyScore();
             allyScore.score = ally.score;
+            allyScore.rank = ally.rank;
             allyScore.date = now;
             allyScore.ally = ally;
             allyScore.save();
@@ -129,16 +132,18 @@ public class Populator extends Job {
 			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
-			ligne.nextLong();
+			long rank = ligne.nextLong();
 			long allyId = ligne.nextLong();
 			long score = ligne.nextLong();	
 			
 			Ally ally = Ally.find("byIgId", allyId).first();
 			if (ally != null){
 				ally.scoreAll = score;
+				ally.rankAll = rank;
 				ally.save();
 			    AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
 			    allyScore.scoreAll = score;
+			    allyScore.rankAll = rank;
 			    allyScore.save();
 			}
 				
@@ -160,17 +165,19 @@ public class Populator extends Job {
 			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
-			ligne.nextLong();
+			long rank = ligne.nextLong();
 			long allyId = ligne.nextLong();
 			long score = ligne.nextLong();	
 			
 			Ally ally = Ally.find("byIgId", allyId).first();
 			if (ally != null){
+				ally.rankAtt = rank;
 				ally.scoreAtt = score;
 	            ally.save();
 	            
 	            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
 	            allyScore.scoreAtt = score;
+	            allyScore.rankAtt = rank;
 	            allyScore.save();
 			}
 			i++;
@@ -192,18 +199,19 @@ public class Populator extends Job {
 			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
-			ligne.nextLong();
+			long rank = ligne.nextLong();
 			long allyId = ligne.nextLong();
 			long score = ligne.nextLong();	
 			
 			Ally ally = Ally.find("byIgId", allyId).first();
 			if (ally != null){
-				
+				ally.rankDef = rank;
 				ally.scoreDef = score;
 	            ally.save();
 	
 	            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
 	            allyScore.scoreDef = score;
+	            allyScore.rankDef = rank;
 	            allyScore.save();
 			}
 			i++;
@@ -268,7 +276,7 @@ public class Populator extends Job {
 			String name = ligne.next();
 			String allyId = ligne.next();
 			Long score = ligne.nextLong();
-			
+			Long rank = ligne.nextLong();
 			ligne.close();
             
             Player player = Player.find("byIgId", igId).first();
@@ -288,10 +296,12 @@ public class Populator extends Job {
 			}
                      
 			player.score = score;
+			player.rank = rank;
             player.save();
 			
             PlayerScore playerScore = new PlayerScore();
             playerScore.score = player.score;
+            playerScore.rank = rank;
             playerScore.date = now;
             playerScore.player = player;
             if(player.ally != null){
@@ -320,16 +330,18 @@ public class Populator extends Job {
 			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
-			ligne.nextLong();
+			long rank = ligne.nextLong();
 			long playerId = ligne.nextLong();
 			long score = ligne.nextLong();	
 			
 			Player player = Player.find("byIgId", playerId).first();
 			player.scoreAll = score;
+			player.rankAll = rank;
             player.save();
 
             PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
             playerScore.scoreAll = score;
+            playerScore.rankAll = rank;
 			playerScore.save();
 				
 			i++;
@@ -350,16 +362,18 @@ public class Populator extends Job {
 			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
-			ligne.nextLong();
+			long rank = ligne.nextLong();
 			long playerId = ligne.nextLong();
 			long score = ligne.nextLong();	
 			
 			Player player = Player.find("byIgId", playerId).first();
 			player.scoreAtt = score;
+			player.rankAtt = rank;
             player.save();
             
             PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
             playerScore.scoreAtt = score;
+            playerScore.rankAtt = rank;
 			playerScore.save();
 			
 			i++;
@@ -382,16 +396,18 @@ public class Populator extends Job {
 			
 			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
 			
-			ligne.nextLong();
+			long rank = ligne.nextLong();
 			long playerId = ligne.nextLong();
 			long score = ligne.nextLong();	
 			
 			Player player = Player.find("byIgId", playerId).first();
 			player.scoreDef = score;
+			player.rankDef = rank;
             player.save();
 
             PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
             playerScore.scoreDef = score;
+            playerScore.rankDef = rank;
 			playerScore.save();
 			
 			i++;
@@ -413,7 +429,8 @@ public class Populator extends Job {
 		Logger.info(">>>>>Town<<<<<");
 		
 		Logger.info("Fetch files");
-		URL townUrl;
+		try {
+                URL townUrl;
 		
 		try {
 			townUrl = new URL("http://fr16.grepolis.com/data/towns.txt.gz");
@@ -423,9 +440,11 @@ public class Populator extends Job {
 		}
 		
 		GZIPInputStream townIn = null;
+                Reader decoder = null;
 		
 		try {
-			townIn = new GZIPInputStream((InputStream) townUrl.getContent());		
+			townIn = new GZIPInputStream((InputStream) townUrl.getContent());
+                        decoder = new InputStreamReader(townIn, "UTF-8");
 		}
 		catch (IOException e) {
 			throw new RuntimeException(e);
@@ -436,47 +455,52 @@ public class Populator extends Job {
 		int i = 0;
 		
 		Logger.info("towns.txt");
-		Scanner scanner = new Scanner(townIn).useDelimiter(",");
-		
-		while(scanner.hasNext()){
+		//Scanner scanner = new Scanner(townIn).useDelimiter(",");
+                
+
+		BufferedReader in= new BufferedReader(decoder,2048);
+        String line = null;
+		while((line = in.readLine()) != null){
 			
-			Scanner ligne = new Scanner(scanner.nextLine()).useDelimiter(",");
+			Scanner ligne = new Scanner(line).useDelimiter(",");
 			
-			long igId = ligne.nextLong();
-			String playerId = ligne.next();
-			String name = ligne.next();
-			int x = ligne.nextInt();
-			int y = ligne.nextInt();
-			long position = ligne.nextLong();
-			long score = ligne.nextLong();
+				long igId = ligne.nextLong();
+				String playerId = ligne.next();
+				String name = ligne.next();
+				int x = ligne.nextInt();
+				int y = ligne.nextInt();
+				long position = ligne.nextLong();
+				long score = ligne.nextLong();
+				
+				
+				
+				Logger.info(name);
+				
+	            Town town = Town.find("byIgId", igId).first();
+	            if(town == null) {
+	            	town = new Town();
+	            	town.igId = igId; 
+	            }
+	            
+				if (!playerId.equals("")) {
+					Player player =  Player.find("byIgId", Long.valueOf(playerId)).first();
+					town.player = player;
+				}
+				
+				try {
+					town.name = URLDecoder.decode(name, "UTF-8");
+				} 
+				catch (UnsupportedEncodingException e) {
+					throw new RuntimeException(e);
+				}
+				
+				town.x = x;
+				town.y = y;
+				town.position = position;
+				town.score = score;
+				town.save();
 			
 			ligne.close();
-			
-			
-            Town town = Town.find("byIgId", igId).first();
-            if(town == null) {
-            	town = new Town();
-            	town.igId = igId; 
-            }
-            
-			if (!playerId.equals("")) {
-				Player player =  Player.find("byIgId", Long.valueOf(playerId)).first();
-				town.player = player;
-			}
-			
-			try {
-				town.name = URLDecoder.decode(name, "UTF-8");
-			} 
-			catch (UnsupportedEncodingException e) {
-				throw new RuntimeException(e);
-			}
-			
-			town.x = x;
-			town.y = y;
-			town.position = position;
-			town.score = score;
-			town.save();
-			
 			TownScore townScore = new TownScore();
 			townScore.date = now;
 			townScore.town = town;
@@ -492,9 +516,13 @@ public class Populator extends Job {
 			}
 			
 		}
-		scanner.close();
+		//scanner.close();
 		Logger.info("->done");
 		Logger.info(">>>>>Done<<<<<");
+                }
+                catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		
 	}
 	

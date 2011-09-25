@@ -1,0 +1,16 @@
+#{extends 'main.html' /}
+#{set title: 'player.name' /}
+
+#{set 'content'}
+<div class="ui-widget">
+<h3>${player.name}</h3>
+<span>Ally:</span><span>${player.ally.name}</span></br>
+<span>score:</span><span>${player.score}</span></br>
+<span>Towns:</span><span>${player.towns.size()}</span></br>
+<span>Kills_all:</span><span>${player.scoreAll}</span></br>
+</div>
+#{/set}
+
+#{set 'panel'}
+#{include 'panel.html'/}
+#{/set}

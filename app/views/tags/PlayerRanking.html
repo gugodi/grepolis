@@ -35,7 +35,7 @@
                             { "mDataProp": "name", "sWidth":"20%", "bSortable": false },
                             { "mDataProp": "score", "sWidth":"10%", "bSortable": false},
                             { "mDataProp": "ally", "sWidth":"20%", "bSortable": false},
-                            { "mDataProp": "townCount", "sWidth":"10%", "bSortable": false},
+                            { "mDataProp": "towns", "sWidth":"10%", "bSortable": false},
                             { "mDataProp": "rankAll", "sWidth":"5%", "bSortable": true},
                             { "mDataProp": "scoreAll", "sWidth":"10%", "bSortable": false},
                             { "mDataProp": "rankAtt", "sWidth":"5%", "bSortable": true},
@@ -43,6 +43,19 @@
                             { "mDataProp": "rankDef", "sWidth":"5%", "bSortable": true},
                             { "mDataProp": "scoreDef", "sWidth":"10%", "bSortable": false},
             ],
+            "fnServerData": function ( sSource, aoData, fnCallback ) {
+	           	$.getJSON( sSource, aoData, function (json) {
+	           	$.each(json.aaData, function(index, value) { 
+	   							if (this.ally != null) {
+	   								this.name =  #{a @Player.view(this.id)}this.name{/a};
+	   								this.ally = this.ally.name;
+	   								
+	   							}
+	   							this.towns = this.towns.length;	
+	  							});
+	           		
+	           	fnCallback(json);
+          	});}
             
         });    
     

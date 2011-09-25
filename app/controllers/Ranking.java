@@ -51,7 +51,7 @@ public class Ranking extends Controller {
 				List<Player> players = Player.find(query).from(iDisplayStart).fetch(25);
 				DataTable<Player> response = new DataTable(Player.count(), Player.count() , sEcho, players);
 				JSONSerializer serializer = new JSONSerializer();
-				String test = serializer.include("aaData","aaData.townCount").serialize(response);
+				String test = serializer.include("aaData","aaData.towns").serialize(response);
 				renderText(test);
 				
 			}

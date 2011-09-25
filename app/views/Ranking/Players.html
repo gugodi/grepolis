@@ -9,4 +9,17 @@
 
 #{set 'content'}
 #{PlayerRanking /}
+<<script type="text/javascript">
+<!--
+$(document).ready(function() {
+$("#example tbody").click(function(event) {
+        $(oTable.fnSettings().aoData).each(function (){
+            $(this.nTr).removeClass('row_selected');
+        });
+        $(event.target.parentNode).addClass('row_selected');
+        $('#playerPanel').load(@{PlayerController.panel($(event.target.parentNode))})
+    });
+}
+//-->
+</script>
 #{/set}

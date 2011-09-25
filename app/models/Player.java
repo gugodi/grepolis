@@ -20,11 +20,19 @@ public class Player extends Model {
 	@Required
 	public long score;
 	
+	public long rank;
+	
 	public long scoreAll;
-       
+	
+	public long rankAll;
+               
 	public long scoreAtt;
-      
+	
+	public long rankAtt;
+             
 	public long scoreDef;
+	
+	public long rankDef;
         
     public boolean tracked;
     
