@@ -17,7 +17,7 @@ $("#example tbody").click(function(event) {
             $(this.nTr).removeClass('row_selected');
         });
         $(event.target.parentNode).addClass('row_selected');
-        $('#playerPanel').load(@{PlayerController.panel($(event.target.parentNode))})
+        $('#playerPanel').load(@{PlayerController.panel('$(event.target.parentNode)')})
     });
 }
 //-->

@@ -142,9 +142,12 @@ public class Populator extends Job {
 				ally.rankAll = rank;
 				ally.save();
 			    AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
-			    allyScore.scoreAll = score;
-			    allyScore.rankAll = rank;
-			    allyScore.save();
+			    
+			    if (allyScore != null){
+				    allyScore.scoreAll = score;
+				    allyScore.rankAll = rank;
+				    allyScore.save();
+			    }
 			}
 				
 			i++;
@@ -176,9 +179,11 @@ public class Populator extends Job {
 	            ally.save();
 	            
 	            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
-	            allyScore.scoreAtt = score;
-	            allyScore.rankAtt = rank;
-	            allyScore.save();
+	            if (allyScore != null){
+				    allyScore.scoreAtt = score;
+				    allyScore.rankAtt = rank;
+				    allyScore.save();
+			    }
 			}
 			i++;
 			if (i % 20 == 0) {
@@ -210,9 +215,11 @@ public class Populator extends Job {
 	            ally.save();
 	
 	            AllyScore allyScore = AllyScore.find("date = ? and ally = ?", now, ally).first();
-	            allyScore.scoreDef = score;
-	            allyScore.rankDef = rank;
-	            allyScore.save();
+	            if (allyScore != null){
+				    allyScore.scoreDef = score;
+				    allyScore.rankDef = rank;
+				    allyScore.save();
+			    }
 			}
 			i++;
 			if (i % 20 == 0) {
@@ -340,9 +347,11 @@ public class Populator extends Job {
             player.save();
 
             PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
-            playerScore.scoreAll = score;
-            playerScore.rankAll = rank;
-			playerScore.save();
+            if (playerScore != null){
+            	playerScore.scoreAll = score;
+            	playerScore.rankAll = rank;
+            	playerScore.save();
+		    }
 				
 			i++;
 			if (i % 20 == 0) {
@@ -372,9 +381,11 @@ public class Populator extends Job {
             player.save();
             
             PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
-            playerScore.scoreAtt = score;
-            playerScore.rankAtt = rank;
-			playerScore.save();
+            if (playerScore != null){
+            	playerScore.scoreAtt = score;
+            	playerScore.rankAtt = rank;
+            	playerScore.save();
+		    }
 			
 			i++;
 			if (i % 20 == 0) {
@@ -406,9 +417,11 @@ public class Populator extends Job {
             player.save();
 
             PlayerScore playerScore = PlayerScore.find("date = ? and player = ?",now,player).first();
-            playerScore.scoreDef = score;
-            playerScore.rankDef = rank;
-			playerScore.save();
+            if (playerScore != null){
+            	playerScore.scoreDef = score;
+            	playerScore.rankDef = rank;
+            	playerScore.save();
+		    }
 			
 			i++;
 			if (i % 20 == 0) {

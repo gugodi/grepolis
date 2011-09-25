@@ -45,9 +45,10 @@
             ],
             "fnServerData": function ( sSource, aoData, fnCallback ) {
 	           	$.getJSON( sSource, aoData, function (json) {
-	           	$.each(json.aaData, function(index, value) { 
+	           	$.each(json.aaData, function(index, value) {
+	           		this.name =  "<a href=\"/player/"+this.id+"\">"+this.name+"</a>";
+						
 	   							if (this.ally != null) {
-	   								this.name =  #{a @Player.view(this.id)}this.name{/a};
 	   								this.ally = this.ally.name;
 	   								
 	   							}

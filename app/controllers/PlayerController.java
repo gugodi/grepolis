@@ -15,4 +15,11 @@ public class PlayerController extends Controller {
 		Logger.info(player.name+String.valueOf(player.id));
 		render(player);
 	}
+	
+	public static void panel(Long id) {
+		
+		Player player = Player.findById(id);
+		Logger.info(player.name+String.valueOf(player.id));
+		render(player);
+	}
 }
